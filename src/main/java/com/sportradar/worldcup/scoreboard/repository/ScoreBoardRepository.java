@@ -11,12 +11,14 @@ import java.util.List;
  **/
 public interface ScoreBoardRepository {
 
-    void addMatch(Match match);
+    boolean addMatch(Match match);
 
-    void UpdateMatchScore(Match match);
+    boolean updateMatch(Match match);
 
     List<Match> findAllMatches();
 
-    void removeMatch(Match match);
+    boolean removeMatch(Match match);
+
+    void clearAll();
 
 }

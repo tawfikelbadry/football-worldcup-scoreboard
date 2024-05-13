@@ -12,13 +12,24 @@ public class DefaultScoreBoardRepository implements ScoreBoardRepository {
     private final List<Match> matchList = ScoreBoardDB.getDB();
 
     @Override
-    public void addMatch(Match match) {
-
+    public boolean addMatch(Match match) {
+        if (exists(match)) {
+            return false;
+        }
+        this.matchList.add(match);
+        return true;
     }
 
     @Override
-    public void UpdateMatchScore(Match matchToUpdate) {
-
+    public boolean updateMatch(Match matchToUpdate) {
+        for (Match match : this.matchList) {
+            if (isSameMatch(match, matchToUpdate)) {
+                match.setHomeTeam(matchToUpdate.getHomeTeam());
+                match.setAwayTeam(matchToUpdate.getAwayTeam());
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -28,7 +39,22 @@ public class DefaultScoreBoardRepository implements ScoreBoardRepository {
 
 
     @Override
-    public void removeMatch(Match match) {
+    public boolean removeMatch(Match matchToDelete) {
+        return this.matchList.removeIf(match -> isSameMatch(matchToDelete, match));
+    }
 
+    @Override
+    public void clearAll() {
+        this.matchList.clear();
+    }
+
+    private boolean isSameMatch(Match match, Match matchToUpdate) {
+        return match.getHomeTeam().getName().equals(matchToUpdate.getHomeTeam().getName()) &&
+                match.getAwayTeam().getName().equals(matchToUpdate.getAwayTeam().getName());
+    }
+
+    private boolean exists(Match match) {
+        return !this.matchList.stream()
+                .filter(match2 -> isSameMatch(match, match2)).toList().isEmpty();
     }
 }
