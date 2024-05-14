@@ -23,4 +23,8 @@ public class Match {
         this.homeTeam = Team.builder().name(homeTeam).score(homeTeamScore).build();
         this.awayTeam = Team.builder().name(awayTeam).score(awayTeamScore).build();
     }
+
+    public boolean hasTeam(String team) {
+        return this.homeTeam.getName().equals(team) || this.awayTeam.getName().equals(team);
+    }
 }

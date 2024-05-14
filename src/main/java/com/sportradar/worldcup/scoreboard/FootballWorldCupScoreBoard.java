@@ -1,5 +1,6 @@
 package com.sportradar.worldcup.scoreboard;
 
+import com.sportradar.worldcup.scoreboard.exception.TeamAlreadyPlayingException;
 import com.sportradar.worldcup.scoreboard.model.Match;
 import com.sportradar.worldcup.scoreboard.model.Team;
 import com.sportradar.worldcup.scoreboard.service.ScoreBoardService;
@@ -20,18 +21,8 @@ public class FootballWorldCupScoreBoard implements WorldCupScoreBoard {
     }
 
     @Override
-    public void startNewMatch(Math newMatch) {
-
-    }
-
-    @Override
-    public void startNewMatch(Team homeTeam, Team awayTeam) {
-
-    }
-
-    @Override
-    public void startNewMatch(String homeTeam, String awayTeam) {
-
+    public boolean startNewMatch(String homeTeam, String awayTeam) throws TeamAlreadyPlayingException {
+        return this.scoreBoardService.startNewMatch(homeTeam, awayTeam);
     }
 
     @Override

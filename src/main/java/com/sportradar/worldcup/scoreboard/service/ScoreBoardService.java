@@ -1,5 +1,6 @@
 package com.sportradar.worldcup.scoreboard.service;
 
+import com.sportradar.worldcup.scoreboard.exception.TeamAlreadyPlayingException;
 import com.sportradar.worldcup.scoreboard.model.Match;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  **/
 public interface ScoreBoardService {
 
-    void startNewMatch(Math newMatch);
+    boolean startNewMatch(String homeTeam, String awayTeam) throws TeamAlreadyPlayingException;
 
     void updateMatchScore(Math match);
 
