@@ -21,4 +21,6 @@ public interface ScoreBoardRepository {
 
     void clearAll();
 
+    boolean exists(Match match);
+
 }

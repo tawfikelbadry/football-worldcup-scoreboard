@@ -48,13 +48,15 @@ public class DefaultScoreBoardRepository implements ScoreBoardRepository {
         this.matchList.clear();
     }
 
+    @Override
+    public boolean exists(Match match) {
+        return !this.matchList.stream()
+                .filter(match2 -> isSameMatch(match, match2)).toList().isEmpty();
+    }
+
     private boolean isSameMatch(Match match, Match matchToUpdate) {
         return match.getHomeTeam().getName().equals(matchToUpdate.getHomeTeam().getName()) &&
                 match.getAwayTeam().getName().equals(matchToUpdate.getAwayTeam().getName());
     }
 
-    private boolean exists(Match match) {
-        return !this.matchList.stream()
-                .filter(match2 -> isSameMatch(match, match2)).toList().isEmpty();
-    }
 }

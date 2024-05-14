@@ -1,5 +1,6 @@
 package com.sportradar.worldcup.scoreboard;
 
+import com.sportradar.worldcup.scoreboard.exception.MatchNotExistException;
 import com.sportradar.worldcup.scoreboard.exception.TeamAlreadyPlayingException;
 import com.sportradar.worldcup.scoreboard.model.Match;
 import com.sportradar.worldcup.scoreboard.model.Team;
@@ -26,13 +27,13 @@ public class FootballWorldCupScoreBoard implements WorldCupScoreBoard {
     }
 
     @Override
-    public void updateMatchScore(Math match) {
-
+    public boolean updateMatchScore(Match match) throws MatchNotExistException {
+        return this.scoreBoardService.updateMatchScore(match);
     }
 
     @Override
-    public void updateMatchScore(Team homeTeam, Team awayTeam) {
-
+    public boolean updateMatchScore(Team homeTeam, Team awayTeam) throws MatchNotExistException {
+        return this.updateMatchScore(new Match(homeTeam, awayTeam));
     }
 
     @Override

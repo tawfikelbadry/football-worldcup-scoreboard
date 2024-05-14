@@ -1,5 +1,6 @@
 package com.sportradar.worldcup.scoreboard.service;
 
+import com.sportradar.worldcup.scoreboard.exception.MatchNotExistException;
 import com.sportradar.worldcup.scoreboard.exception.TeamAlreadyPlayingException;
 import com.sportradar.worldcup.scoreboard.model.Match;
 import com.sportradar.worldcup.scoreboard.repository.impl.DefaultScoreBoardRepository;
@@ -85,5 +86,43 @@ public class DefaultScoreBoardServiceTest {
         boolean started = scoreBoardService.startNewMatch("BTeam", "CTeam");
         Assertions.assertTrue(started, "Match didn't start successfully!");
     }
+
+    @Test
+    @DisplayName("Update MatchScore Successfully Test")
+    void updateMatchScoreSuccessfullyTest() throws MatchNotExistException {
+        Match match = new Match("HTeam", 0, "ATeam", 2);
+        Mockito.when(scoreBoardRepository.exists(match)).thenReturn(true);
+        Mockito.when(scoreBoardRepository.updateMatch(match)).thenReturn(true);
+
+        boolean updated = scoreBoardService.updateMatchScore(match);
+        Assertions.assertTrue(updated, "Failed to update Match!");
+    }
+
+    @Test
+    @DisplayName("Update MatchScore Failed MatchNotExist Test")
+    void updateMatchScoreFailedMatchNotExistTest() {
+        Match match = new Match("HTeam", 0, "ATeam", 2);
+        Mockito.when(scoreBoardRepository.exists(match)).thenReturn(false);
+
+        MatchNotExistException exception = Assertions.assertThrows(
+                MatchNotExistException.class, () -> scoreBoardService.updateMatchScore(match),
+                "Expected to throw Exception but it didn't!"
+        );
+        Assertions.assertEquals("Match is not exist!", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Update MatchScore Failed EmptyValues Test")
+    void updateMatchScoreFailedMatchNotEmptyValuesTest() throws MatchNotExistException {
+        Match match = new Match(null, 0, "", 2);
+        boolean updated = scoreBoardService.updateMatchScore(match);
+        Assertions.assertFalse(updated, "Expected false but returned true");
+        match = new Match("ATeam", 0, "", 2);
+        updated = scoreBoardService.updateMatchScore(match);
+        Assertions.assertFalse(updated, "Expected false but returned true");
+        updated = scoreBoardService.updateMatchScore(null);
+        Assertions.assertFalse(updated, "Expected false but returned true");
+    }
+
 
 }

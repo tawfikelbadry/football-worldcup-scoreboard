@@ -1,5 +1,6 @@
 package com.sportradar.worldcup.scoreboard;
 
+import com.sportradar.worldcup.scoreboard.exception.MatchNotExistException;
 import com.sportradar.worldcup.scoreboard.exception.TeamAlreadyPlayingException;
 import com.sportradar.worldcup.scoreboard.model.Match;
 import com.sportradar.worldcup.scoreboard.model.Team;
@@ -26,9 +27,29 @@ public interface WorldCupScoreBoard {
      */
     boolean startNewMatch(String homeTeam, String awayTeam) throws TeamAlreadyPlayingException;
 
-    void updateMatchScore(Math match);
+    /**
+     * This function accept 1 params @match
+     * and update the match score for this match
+     * It will return false if any of the match [ teams, names] are empty or null
+     * It will return false if the provided score less than 0
+     * It will throw @{@link MatchNotExistException} if the match not exist in the score board
+     * if match score updated successfully it will return true
+     *
+     * @param match The match object with teams' names and scores.
+     * @return True if match score updated, false otherwise or throw {@link MatchNotExistException} if match not exists.
+     */
+    boolean updateMatchScore(Match match) throws MatchNotExistException;
 
-    void updateMatchScore(Team homeTeam, Team awayTeam);
+    /**
+     * This function accept 2 params @homeTeam, @awayTeam
+     * and update the match score for this match
+     * It's overloading the function @updateMatchScore(@{@link Match}), so it's doing the same logic
+     *
+     * @param homeTeam The first team object with its name and score.
+     * @param awayTeam The second team object with its name and score.
+     * @return True if match score updated, false otherwise or throw {@link MatchNotExistException} if match not exists.
+     */
+    boolean updateMatchScore(Team homeTeam, Team awayTeam) throws MatchNotExistException;
 
     void finishMatch(Match match);
 
