@@ -56,7 +56,7 @@ public class FootballWorldCupScoreBoardTest {
     }
 
     @Test
-    @DisplayName("Update MatchScore Successful Test")
+    @DisplayName("Update MatchScore Successfully Test")
     void updateMatchScoreSuccessfulTest() throws MatchNotExistException {
         Match match = new Match("HTeam", 2, "ATeam", 1);
         Mockito.when(scoreBoardService.updateMatchScore(match)).thenReturn(true);
@@ -77,6 +77,30 @@ public class FootballWorldCupScoreBoardTest {
         Match match = new Match("HTeam", 2, "ATeam", 1);
         Mockito.when(scoreBoardService.updateMatchScore(match)).thenThrow(new MatchNotExistException("Match is not exist!"));
         MatchNotExistException exception = Assertions.assertThrows(MatchNotExistException.class, () -> scoreBoard.updateMatchScore(match));
+        Assertions.assertEquals("Match is not exist!", exception.getMessage(), "Exception message is wrong!");
+    }
+
+    @Test
+    @DisplayName("Finish Match Successfully Test")
+    void finishMatchSuccessfulTest() throws MatchNotExistException {
+        Match match = new Match("HTeam", 2, "ATeam", 1);
+        Mockito.when(scoreBoardService.finishMatch(match)).thenReturn(true);
+        boolean finished = this.scoreBoard.finishMatch(match);
+        Assertions.assertTrue(finished, "Failed to finish match!");
+
+        Team homeTeam = Team.builder().name("HomeTeam").score(2).build();
+        Team awayTeam = Team.builder().name("AwayTeam").score(1).build();
+        Mockito.when(scoreBoardService.finishMatch(ArgumentMatchers.any(Match.class))).thenReturn(true);
+        finished = this.scoreBoard.finishMatch(homeTeam, awayTeam);
+        Assertions.assertTrue(finished, "Failed to finish match!");
+    }
+
+    @Test
+    @DisplayName("Update MatchScore Failed Test")
+    void finishMatchFailedTest() throws MatchNotExistException {
+        Match match = new Match("HTeam", 2, "ATeam", 1);
+        Mockito.when(scoreBoardService.finishMatch(match)).thenThrow(new MatchNotExistException("Match is not exist!"));
+        MatchNotExistException exception = Assertions.assertThrows(MatchNotExistException.class, () -> scoreBoard.finishMatch(match));
         Assertions.assertEquals("Match is not exist!", exception.getMessage(), "Exception message is wrong!");
     }
 

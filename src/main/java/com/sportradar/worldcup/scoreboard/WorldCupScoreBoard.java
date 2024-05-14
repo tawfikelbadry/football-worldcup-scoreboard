@@ -51,11 +51,43 @@ public interface WorldCupScoreBoard {
      */
     boolean updateMatchScore(Team homeTeam, Team awayTeam) throws MatchNotExistException;
 
-    void finishMatch(Match match);
+    /**
+     * This function accept 1 params @match
+     * and Finish the match, remove it from score board
+     * It will return false if any of the match [ teams, names] are empty or null
+     * It will throw @{@link MatchNotExistException} if the match not exist in the score board
+     * if match finished/removed successfully it will return true
+     *
+     * @param match The match object with teams' names (scores will be ignored in this case).
+     * @return True if match finished/removed, false otherwise or throw {@link MatchNotExistException} if match not exists.
+     */
+    boolean finishMatch(Match match) throws MatchNotExistException;
 
-    void finishMatch(Team homeTeam, Team awayTeam);
+    /**
+     * This function accept 2 params @homeTeam, @awayTeam
+     * and Finish the match, remove it from score board
+     * It will return false if any of the [teams, names] are empty or null
+     * It will throw @{@link MatchNotExistException} if the match not exist in the score board
+     * if match finished/removed successfully it will return true
+     *
+     * @param homeTeam The first team object (scores will be ignored in this case).
+     * @param awayTeam The second team object (scores will be ignored in this case).
+     * @return True if match finished/removed, false otherwise or throw {@link MatchNotExistException} if match not exists.
+     */
+    boolean finishMatch(Team homeTeam, Team awayTeam) throws MatchNotExistException;
 
-    void finishMatch(String homeTeam, String awayTeam);
+    /**
+     * This function accept 2 params @homeTeam, @awayTeam
+     * and Finish the match, remove it from score board
+     * It will return false if any of the teams' names are empty or null
+     * It will throw @{@link MatchNotExistException} if the match not exist in the score board
+     * if match finished/removed successfully it will return true
+     *
+     * @param homeTeam The first team name.
+     * @param awayTeam The second team name.
+     * @return True if match finished/removed, false otherwise or throw {@link MatchNotExistException} if match not exists.
+     */
+    boolean finishMatch(String homeTeam, String awayTeam) throws MatchNotExistException;
 
     List<Match> getSummary();
 

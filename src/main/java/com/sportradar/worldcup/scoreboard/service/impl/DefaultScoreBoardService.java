@@ -52,6 +52,10 @@ public class DefaultScoreBoardService implements ScoreBoardService {
         if (!validateMatch(match)) {
             return false;
         }
+        if (match.getHomeTeam().getScore() < 0 || match.getAwayTeam().getScore() < 0) {
+            logger.warn("Teams' scores can't be with negative, Skipping and returning false");
+            return false;
+        }
         if (!scoreBoardRepository.exists(match)) {
             throw new MatchNotExistException("Match is not exist!");
         }
@@ -59,8 +63,14 @@ public class DefaultScoreBoardService implements ScoreBoardService {
     }
 
     @Override
-    public void finishMatch(Match match) {
-
+    public boolean finishMatch(Match match) throws MatchNotExistException {
+        if (!validateMatch(match)) {
+            return false;
+        }
+        if (!scoreBoardRepository.exists(match)) {
+            throw new MatchNotExistException("Match is not exist!");
+        }
+        return scoreBoardRepository.removeMatch(match);
     }
 
     @Override
@@ -81,9 +91,6 @@ public class DefaultScoreBoardService implements ScoreBoardService {
             return false;
         } else if (isEmpty(match.getHomeTeam().getName()) || isEmpty(match.getAwayTeam().getName())) {
             logger.warn("One of your teams' values are empty, Skipping and returning false");
-            return false;
-        } else if (match.getHomeTeam().getScore() < 0 || match.getAwayTeam().getScore() < 0) {
-            logger.warn("Teams' scores can't be with negative, Skipping and returning false");
             return false;
         }
         return true;

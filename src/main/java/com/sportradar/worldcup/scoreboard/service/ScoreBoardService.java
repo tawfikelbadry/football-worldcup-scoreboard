@@ -17,7 +17,7 @@ public interface ScoreBoardService {
 
     boolean updateMatchScore(Match match) throws MatchNotExistException;
 
-    void finishMatch(Match match);
+    boolean finishMatch(Match match) throws MatchNotExistException;
 
     List<Match> getSummary();
 

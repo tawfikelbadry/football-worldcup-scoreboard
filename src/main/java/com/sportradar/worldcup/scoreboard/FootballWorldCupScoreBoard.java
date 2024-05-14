@@ -37,18 +37,18 @@ public class FootballWorldCupScoreBoard implements WorldCupScoreBoard {
     }
 
     @Override
-    public void finishMatch(Match match) {
-
+    public boolean finishMatch(Match match) throws MatchNotExistException {
+        return this.scoreBoardService.finishMatch(match);
     }
 
     @Override
-    public void finishMatch(Team homeTeam, Team awayTeam) {
-
+    public boolean finishMatch(Team homeTeam, Team awayTeam) throws MatchNotExistException {
+        return this.finishMatch(new Match(homeTeam, awayTeam));
     }
 
     @Override
-    public void finishMatch(String homeTeam, String awayTeam) {
-
+    public boolean finishMatch(String homeTeam, String awayTeam) throws MatchNotExistException {
+        return this.finishMatch(new Match(homeTeam, awayTeam));
     }
 
     @Override

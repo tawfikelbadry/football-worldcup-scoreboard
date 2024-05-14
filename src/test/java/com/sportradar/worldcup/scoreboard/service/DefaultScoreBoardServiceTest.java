@@ -124,5 +124,34 @@ public class DefaultScoreBoardServiceTest {
         Assertions.assertFalse(updated, "Expected false but returned true");
     }
 
+    @Test
+    void testFinishMatchSuccessfullyTest() throws MatchNotExistException {
+        Match match = new Match("HTeam", 0, "ATeam", 2);
+        Mockito.when(scoreBoardRepository.exists(match)).thenReturn(true);
+        Mockito.when(scoreBoardRepository.removeMatch(match)).thenReturn(true);
+
+        boolean finished = scoreBoardService.finishMatch(match);
+        Assertions.assertTrue(finished, "Failed to finish Match");
+    }
+
+    @Test
+    void testFinishMatchFailedMatchNotExistTest() {
+        Match match = new Match("HTeam", 0, "ATeam", 2);
+        Mockito.when(scoreBoardRepository.exists(match)).thenReturn(false);
+
+        Exception exception = Assertions.assertThrows(MatchNotExistException.class, () -> scoreBoardService.finishMatch(match));
+        Assertions.assertEquals("Match is not exist!", exception.getMessage(), "Exception message is not correct!");
+    }
+
+    @Test
+    void testFinishMatchFailedMatchEmptyValuesTest() throws MatchNotExistException {
+        Match match = new Match("", 0, "ATeam", 2);
+        boolean finished = this.scoreBoardService.finishMatch(match);
+        Assertions.assertFalse(finished, "Expected false but returned true");
+
+        match = new Match("AJTeam", 0, null, 2);
+        finished = this.scoreBoardService.finishMatch(match);
+        Assertions.assertFalse(finished, "Expected false but returned true");
+    }
 
 }
