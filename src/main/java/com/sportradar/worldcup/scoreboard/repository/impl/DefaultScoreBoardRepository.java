@@ -12,7 +12,7 @@ public class DefaultScoreBoardRepository implements ScoreBoardRepository {
     private final List<Match> matchList = ScoreBoardDB.getDB();
 
     @Override
-    public boolean addMatch(Match match) {
+    public synchronized boolean addMatch(Match match) {
         if (exists(match)) {
             return false;
         }
@@ -21,7 +21,7 @@ public class DefaultScoreBoardRepository implements ScoreBoardRepository {
     }
 
     @Override
-    public boolean updateMatch(Match matchToUpdate) {
+    public synchronized boolean updateMatch(Match matchToUpdate) {
         for (Match match : this.matchList) {
             if (isSameMatch(match, matchToUpdate)) {
                 match.setHomeTeam(matchToUpdate.getHomeTeam());
