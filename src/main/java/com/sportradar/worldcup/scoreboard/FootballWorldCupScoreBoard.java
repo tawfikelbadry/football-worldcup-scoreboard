@@ -53,6 +53,6 @@ public class FootballWorldCupScoreBoard implements WorldCupScoreBoard {
 
     @Override
     public List<Match> getSummary() {
-        return null;
+        return this.scoreBoardService.getSummary();
     }
 }

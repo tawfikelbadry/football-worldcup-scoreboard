@@ -125,7 +125,7 @@ public class DefaultScoreBoardServiceTest {
     }
 
     @Test
-    void testFinishMatchSuccessfullyTest() throws MatchNotExistException {
+    void finishMatchSuccessfullyTest() throws MatchNotExistException {
         Match match = new Match("HTeam", 0, "ATeam", 2);
         Mockito.when(scoreBoardRepository.exists(match)).thenReturn(true);
         Mockito.when(scoreBoardRepository.removeMatch(match)).thenReturn(true);
@@ -135,7 +135,7 @@ public class DefaultScoreBoardServiceTest {
     }
 
     @Test
-    void testFinishMatchFailedMatchNotExistTest() {
+    void finishMatchFailedMatchNotExistTest() {
         Match match = new Match("HTeam", 0, "ATeam", 2);
         Mockito.when(scoreBoardRepository.exists(match)).thenReturn(false);
 
@@ -144,7 +144,7 @@ public class DefaultScoreBoardServiceTest {
     }
 
     @Test
-    void testFinishMatchFailedMatchEmptyValuesTest() throws MatchNotExistException {
+    void finishMatchFailedMatchEmptyValuesTest() throws MatchNotExistException {
         Match match = new Match("", 0, "ATeam", 2);
         boolean finished = this.scoreBoardService.finishMatch(match);
         Assertions.assertFalse(finished, "Expected false but returned true");
@@ -154,4 +154,34 @@ public class DefaultScoreBoardServiceTest {
         Assertions.assertFalse(finished, "Expected false but returned true");
     }
 
+    @Test
+    @DisplayName("Get Ordered Summary Test")
+    void getOrderedSummaryTest() {
+        List<Match> matchListFromDB = List.of(
+                new Match("Mexico", 0, "Canada", 5),
+                new Match("Spain", 10, "Brazil", 2),
+                new Match("Germany", 2, "France", 2),
+                new Match("Uruguay", 6, "Italy", 6),
+                new Match("Argentina", 3, "Australia", 1)
+        );
+        Mockito.when(this.scoreBoardRepository.findAllMatches()).thenReturn(matchListFromDB);
+        List<Match> summary = this.scoreBoardService.getSummary();
+
+        List<Match> sortedMatchesList = List.of(
+                new Match("Uruguay", 6, "Italy", 6),
+                new Match("Spain", 10, "Brazil", 2),
+                new Match("Mexico", 0, "Canada", 5),
+                new Match("Argentina", 3, "Australia", 1),
+                new Match("Germany", 2, "France", 2)
+        );
+
+        for (int i = 0; i < summary.size(); i++) {
+            Assertions.assertTrue(isSameMatch(summary.get(i), sortedMatchesList.get(i)), "the summary returns the matches in wrong order!");
+        }
+    }
+
+    private boolean isSameMatch(Match match, Match matchToUpdate) {
+        return match.getHomeTeam().getName().equals(matchToUpdate.getHomeTeam().getName()) &&
+                match.getAwayTeam().getName().equals(matchToUpdate.getAwayTeam().getName());
+    }
 }

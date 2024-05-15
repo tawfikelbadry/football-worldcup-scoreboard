@@ -89,6 +89,15 @@ public interface WorldCupScoreBoard {
      */
     boolean finishMatch(String homeTeam, String awayTeam) throws MatchNotExistException;
 
+    /**
+     * This function Get a summary of matches in progress ordered by their total score
+     * The matches with the same total score will be returned ordered by the most recently started match in the scoreboard.
+     * <p>
+     * Note: we keep the Original list in the storage the same, and take a copy of the list,
+     * so we don't change the order of matches started, in case of having 2 matches with same total scores
+     *
+     * @return @{@link List<Match>} ordered by their total score
+     */
     List<Match> getSummary();
 
 

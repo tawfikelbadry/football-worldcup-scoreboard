@@ -9,6 +9,8 @@ import com.sportradar.worldcup.scoreboard.service.ScoreBoardService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class DefaultScoreBoardService implements ScoreBoardService {
@@ -75,7 +77,11 @@ public class DefaultScoreBoardService implements ScoreBoardService {
 
     @Override
     public List<Match> getSummary() {
-        return null;
+        List<Match> orderedMatchList = new ArrayList<>(this.scoreBoardRepository.findAllMatches());
+        orderedMatchList.sort(
+                Comparator.comparingInt(match -> (match.getHomeTeam().getScore() + match.getAwayTeam().getScore()))
+        );
+        return orderedMatchList.reversed();
     }
 
     private boolean isEmpty(String team) {
